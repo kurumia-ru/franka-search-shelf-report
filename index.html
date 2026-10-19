@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SearchShelfBack — 棚の奥から対象物を探す</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #eef2f0;
+      --ink: #1b1f1c;
+      --muted: #5c6560;
+      --line: #c9d2cc;
+      --card: #fbfcfb;
+      --ok: #0b6b45;
+      --bad: #9b1c1c;
+      --warn: #8a4b08;
+      --accent: #1f4d3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Noto Sans JP", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 380px at 0% -10%, #d5e6dc 0%, transparent 55%),
+        radial-gradient(700px 320px at 100% 0%, #e7e0d4 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.5;
+    }
+    main { max-width: 1120px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1 { font-size: 1.55rem; margin: 0 0 0.35rem; letter-spacing: -0.02em; }
+    h2 { font-size: 1.12rem; margin: 2.1rem 0 0.7rem; }
+    h3 { margin: 0; font-size: 1.02rem; }
+    p.lead { color: var(--muted); margin: 0 0 1rem; max-width: 52rem; }
+    a { color: var(--accent); }
+    .note {
+      border-left: 3px solid var(--warn);
+      background: #fff6e8;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0 1.25rem;
+      color: #5a3b12;
+    }
+    .note.ok {
+      border-left-color: var(--ok);
+      background: #edf7f1;
+      color: #184833;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 0.86rem;
+      margin-bottom: 0.9rem;
+    }
+    th, td { padding: 0.48rem 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #e5ebe7; font-weight: 600; }
+    table.kv th { width: 11rem; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .bad { color: var(--bad); font-weight: 700; }
+    .muted { color: var(--muted); }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 0.9rem;
+      margin: 1.1rem 0 0.4rem;
+    }
+    .hero figure, .grid figure {
+      margin: 0;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    video, img { width: 100%; display: block; background: #111; }
+    figcaption { padding: 0.4rem 0.55rem; font-size: 0.8rem; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.75rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.45rem;
+      margin: 0.4rem 0 1rem;
+    }
+    .step {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.55rem 0.5rem 0.6rem;
+      min-height: 7.2rem;
+    }
+    .step .n {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .step .t { font-weight: 700; font-size: 0.86rem; margin: 0.15rem 0 0.2rem; }
+    .step p { margin: 0; font-size: 0.75rem; color: var(--muted); }
+    .step.ok { border-color: #b7d8c6; background: #f3faf6; }
+    .step.skip { opacity: 0.78; }
+    pre {
+      background: #1b1f1c;
+      color: #e8eee9;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      border-radius: 2px;
+    }
+    code { font-size: 0.82em; }
+    footer { margin-top: 2.2rem; color: var(--muted); font-size: 0.82rem; }
+    @media (max-width: 860px) {
+      .hero, .steps { grid-template-columns: 1fr; }
+      .step { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>SearchShelfBack — 棚の奥から対象物を探す</h1>
+  <p class="lead">
+    RoboCasa365 のキッチンで、開けたキャビネットの奥にある対象物を探す GT スクリプト。
+    遠隔操作なし。Franka（PandaOmron）が正面観察 → 横覗き → 手前をずらす → 奥を覗く → 別商品をどかす → 再観察 → pick まで通す。
+  </p>
+  <p class="note ok">
+    <strong>seed 5 で成功。</strong>
+    土台を 16&nbsp;cm 後退させたあと開口から水平に入り、奥の缶を掴んで棚の外まで引き出し、+16.9&nbsp;cm 持ち上げて保持。
+    所要 29.9 秒 · 808 フレーム · p-ws-40 · 2026-10-19。
+  </p>
+
+  <div class="hero">
+    <figure>
+      <video controls playsinline poster="frames/agentview_left_mid.png">
+        <source src="videos/side_by_side.mp4" type="video/mp4" />
+      </video>
+      <figcaption>本番ロールアウト（seed 5）。左: agentview_left · 中: 一人称 · 右: agentview_center</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/eye_in_hand_last.png" alt="一人称カメラで掴んだ缶" />
+      <figcaption>終了時の一人称。缶を掴んだまま開口の外で保持している</figcaption>
+    </figure>
+  </div>
+
+  <h2>タスク</h2>
+  <table class="kv">
+    <tr><th>名前</th><td><code>SearchShelfBack</code>（Kitchen サブクラス）</td></tr>
+    <tr><th>言語指示</th><td>Search the back of the open cabinet for the target object. Move blocking items aside if needed, then pick the target.</td></tr>
+    <tr><th>成功条件</th><td>グリッパが <code>target</code> を保持している（<code>gripper_obj_far</code> が偽）かつ、開始高さから十分持ち上がっている</td></tr>
+    <tr><th>ロボット</th><td>Franka PandaOmron（7-DoF アーム + ホロノミック移動台 + グリッパ）</td></tr>
+    <tr><th>制御</th><td>OSC_POSE デルタ。基準は origin フレーム、<code>_goal_update_mode=achieved</code>。テレオペなし</td></tr>
+    <tr><th>環境</th><td>RoboCasa365 Kitchen · split=pretrain · キャビネットは最初から開いている</td></tr>
+    <tr><th>カメラ</th><td><code>robot0_agentview_left</code> / <code>center</code> / <code>robot0_eye_in_hand</code>（256×256）</td></tr>
+    <tr><th>配置</th><td>対象・邪魔物はすべて棚の中。カウンタ上のピックではない</td></tr>
+  </table>
+
+  <h2>物体配置</h2>
+  <p class="lead" style="margin-bottom:0.6rem">キャビネット内の y は手前 = −1、奥 = +1。jam / canned_food のみ（ボトルは OSC ピンチで滑る）。</p>
+  <table>
+    <thead>
+      <tr><th>名前</th><th>役割</th><th>配置</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>target</code></td><td>奥の対象。最終的に pick する</td><td>棚内 <code>pos=(0.0, 1.0)</code> size 0.40×0.18</td></tr>
+      <tr><td><code>front_obj</code></td><td>手前の邪魔物。ずらして奥を見せる</td><td>棚内 <code>pos=(0.0, −1.0)</code> size 0.40×0.18</td></tr>
+      <tr><td><code>other_obj</code></td><td>横の別商品。開口から遠いときはスキップ</td><td>棚内 <code>pos=(0.75, 0.15)</code> size 0.28×0.18</td></tr>
+    </tbody>
+  </table>
+
+  <h2>7 段階</h2>
+  <div class="steps">
+    <div class="step ok">
+      <div class="n">1 / 7</div>
+      <div class="t">正面観察</div>
+      <p>開口の手前 20&nbsp;cm で棚口の高さに静止し、手前の物を見る。</p>
+    </div>
+    <div class="step ok">
+      <div class="n">2 / 7</div>
+      <div class="t">横から覗く</div>
+      <p>開口に戻ってから横 16&nbsp;cm ずらし、隙間から中を見る。</p>
+    </div>
+    <div class="step ok">
+      <div class="n">3 / 7</div>
+      <div class="t">手前をずらす</div>
+      <p>front_obj を掴んでカウンタへ。掴めなければ撤退。</p>
+    </div>
+    <div class="step ok">
+      <div class="n">4 / 7</div>
+      <div class="t">奥を覗く</div>
+      <p>奥の target の手前 18&nbsp;cm で再観察。</p>
+    </div>
+    <div class="step skip">
+      <div class="n">5 / 7</div>
+      <div class="t">別商品をどかす</div>
+      <p>開口から 40&nbsp;cm 超ならスキップ。seed 5 は 0.44&nbsp;m でスキップ。</p>
+    </div>
+    <div class="step ok">
+      <div class="n">6 / 7</div>
+      <div class="t">再観察</div>
+      <p>target を開口からもう一度見る。</p>
+    </div>
+    <div class="step ok">
+      <div class="n">7 / 7</div>
+      <div class="t">target を pick</div>
+      <p>開口から水平に入り、掴んで同じ高さで引き出し、外で持ち上げる。</p>
+    </div>
+  </div>
+
+  <h2>seed 5 の結果</h2>
+  <table>
+    <thead>
+      <tr><th>段階</th><th>結果</th><th>メモ</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0 土台後退</td><td class="ok">到達</td><td>16&nbsp;cm。ベース 2.547 → 2.677、EE 2.297 → 2.428</td></tr>
+      <tr><td>1 正面観察</td><td class="ok">到達</td><td>棚口の高さで静止</td></tr>
+      <tr><td>2 横覗き</td><td class="ok">到達</td><td></td></tr>
+      <tr><td>3 手前ずらし</td><td>把持失敗 → 撤退</td><td>微小リフト dz −0.003 / +0.018。front はその後 z=0.25 へ落ち、結果的に開口から外れた</td></tr>
+      <tr><td>4 奥を覗く</td><td class="ok">到達</td><td></td></tr>
+      <tr><td>5 別商品</td><td class="muted">スキップ</td><td>other_obj が開口から 0.44&nbsp;m</td></tr>
+      <tr><td>6 再観察</td><td class="ok">到達</td><td></td></tr>
+      <tr><td>7 pick target</td><td class="ok">held=True</td><td>dz = +0.169&nbsp;m · 位置 [2.246, −0.824, 1.622]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>動画</h2>
+  <div class="grid">
+    <figure>
+      <video controls playsinline>
+        <source src="videos/agentview_left.mp4" type="video/mp4" />
+      </video>
+      <figcaption>agentview_left（三人称・左）</figcaption>
+    </figure>
+    <figure>
+      <video controls playsinline>
+        <source src="videos/eye_in_hand.mp4" type="video/mp4" />
+      </video>
+      <figcaption>eye_in_hand（一人称）</figcaption>
+    </figure>
+    <figure>
+      <video controls playsinline>
+        <source src="videos/agentview_center.mp4" type="video/mp4" />
+      </video>
+      <figcaption>agentview_center（三人称・中央）</figcaption>
+    </figure>
+  </div>
+
+  <h2>途中・終了フレーム</h2>
+  <div class="grid">
+    <figure>
+      <img src="frames/agentview_left_mid.png" alt="途中の左視点。棚の中にジャムと缶が見える" />
+      <figcaption>途中 · left。棚の中に jam / 缶が見える</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/agentview_center_mid.png" alt="途中の中央視点" />
+      <figcaption>途中 · center</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/eye_in_hand_mid.png" alt="途中の一人称。グリッパが棚板に近い" />
+      <figcaption>途中 · 一人称。棚板に近い</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/agentview_left_last.png" alt="終了時。缶を掴んで開口の外" />
+      <figcaption>終了 · left。缶を開口の外で保持</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/agentview_center_last.png" alt="終了時の中央視点" />
+      <figcaption>終了 · center</figcaption>
+    </figure>
+    <figure>
+      <img src="frames/eye_in_hand_last.png" alt="終了時の一人称。赤い缶の底" />
+      <figcaption>終了 · 一人称。掴んだ缶</figcaption>
+    </figure>
+  </div>
+
+  <h2>うまくいくまでに試したこと</h2>
+  <table>
+    <thead>
+      <tr><th>試み</th><th>結果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>カウンタの上で pick（開いた棚の手前）</td><td>掴めるが、棚の中の探索ではない</td></tr>
+      <tr><td>壁キャビネットを上から屋根越しに降りる</td><td>OSC が発散。EE が z=1.67 や y=−5 へ飛ぶ</td></tr>
+      <tr><td>カウンタ高さ SAFE_Z=1.12 のまま壁棚へ</td><td>棚面（物体 z≈1.44–1.49）に届かない</td></tr>
+      <tr><td>開口の高さで水平に入る</td><td>観察と進入は安定。把持はまだ外れやすい</td></tr>
+      <tr><td>移動台を 16&nbsp;cm 後退させてから腕を入れる</td><td>キャビネット前面との干渉が減る</td></tr>
+      <tr><td>掴めたかを 3&nbsp;cm リフトで確認し、失敗なら引き出す前に中止</td><td>床へ落とす失敗を止めた</td></tr>
+      <tr><td>引き出しは gain 2.0・EE の z を固定し、外に出てから +14&nbsp;cm 持ち上げ</td><td>棚縁で落とさなくなる</td></tr>
+      <tr><td>ボトルをやめて jam / 缶だけにする</td><td>ピンチがかかる</td></tr>
+      <tr><td>seed 1–4 の quick pick</td><td>降下タイムアウト、または未把持</td></tr>
+      <tr><td>seed 5 + 上記の組み合わせ</td><td class="ok">target を保持したまま lift-out まで成功</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Pick の中身</h2>
+  <p class="lead">開口から水平に入り、掴んで同じ高さで引き出す。屋根を突き抜けない。</p>
+  <table>
+    <thead>
+      <tr><th>手順</th><th>内容</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>mouth</td><td>開口 XY、棚口の高さへ移動</td></tr>
+      <tr><td>in</td><td>物体の手前 8&nbsp;cm、物体 z + 5&nbsp;cm まで進入</td></tr>
+      <tr><td>descend</td><td>中心、だめなら 0.35×高さ でもう一度</td></tr>
+      <tr><td>close</td><td>42 ステップ閉じる → 3&nbsp;cm nudging → 保持判定</td></tr>
+      <tr><td>失敗時</td><td>開口へ撤退。引き出さない</td></tr>
+      <tr><td>extract</td><td>今の EE 高さを保ったまま開口までゆっくり戻る</td></tr>
+      <tr><td>lift-out</td><td>棚の外で +14&nbsp;cm 上げて保持</td></tr>
+    </tbody>
+  </table>
+
+  <h2>再実行</h2>
+  <p class="lead">p-ws-40、conda <code>robocasa</code>、キッチンアセット導入済み。</p>
+<pre>ssh p-ws-40
+conda activate robocasa
+export MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=1
+cd ~/robocasa_ai_worker
+python scripts/scripted_search_shelf_franka.py --seed 5 --backup 0.16 \
+  --out-dir outputs/franka_search_shelf</pre>
+  <p class="muted">実装: <code>scripts/scripted_search_shelf_franka.py</code>（環境クラス <code>SearchShelfBack</code> + 上記 7 段階）。 MimicGen は未使用。キャビネットを開ける primitive は使わない（最初から開いている）。</p>
+
+  <footer>
+    RoboCasa365 · Franka PandaOmron · GT scripted · 遠隔操作なし · 2026-10-19
+  </footer>
+</main>
+</body>
+</html>
