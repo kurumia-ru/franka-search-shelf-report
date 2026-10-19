@@ -79,7 +79,7 @@
     <tr><th>操作</th><td>遠隔操作なし（位置指定の自動動作）</td></tr>
     <tr><th>棚</th><td>最初は閉まっている。物はすべて棚の中</td></tr>
     <tr><th>開ける</th><td>公式 OpenCabinet 人間デモ（20250819, ep 3）のハンドル相対スキル</td></tr>
-    <tr><th>成功</th><td>棚を開け、奥の対象を掴み、棚の外まで引き出して持ち上げる</td></tr>
+    <tr><th>成功</th><td>棚を開け、手前の邪魔物をどかし、奥の対象を掴み出して持ち上げる</td></tr>
     <tr><th>seed</th><td>5</td></tr>
   </table>
   <table>
@@ -88,7 +88,7 @@
     </thead>
     <tbody>
       <tr><td>target</td><td>奥の対象。最後に pick</td><td>棚の奥</td></tr>
-      <tr><td>front_obj</td><td>手前の邪魔物</td><td>棚の手前</td></tr>
+      <tr><td>front_obj</td><td>手前の邪魔物。ずらす</td><td>棚の手前</td></tr>
       <tr><td>other_obj</td><td>横の別商品</td><td>棚の横</td></tr>
     </tbody>
   </table>
@@ -102,7 +102,13 @@
       <tr><td>1</td><td>台車を少し下げて、扉が振れる隙間をつくる</td></tr>
       <tr><td>2</td><td>左扉を、公式デモと同じ下からの接近で引いて開ける</td></tr>
       <tr><td>3</td><td>右扉を開けて、棚の中に入れるようにする</td></tr>
-      <tr><td>4</td><td>奥の対象を pick する</td></tr>
+      <tr><td>4</td><td>正面から観察する</td></tr>
+      <tr><td>5</td><td>横から覗く</td></tr>
+      <tr><td>6</td><td>手前の物をずらす</td></tr>
+      <tr><td>7</td><td>奥を覗く</td></tr>
+      <tr><td>8</td><td>別の商品をどかす</td></tr>
+      <tr><td>9</td><td>もう一度観察する</td></tr>
+      <tr><td>10</td><td>奥の対象を pick する</td></tr>
     </tbody>
   </table>
 
@@ -115,7 +121,13 @@
       <tr><td>1</td><td>台車を下げる</td><td class="ok">できた</td></tr>
       <tr><td>2</td><td>左扉を開ける</td><td class="ok">できた</td></tr>
       <tr><td>3</td><td>右扉を開ける</td><td class="ok">できた</td></tr>
-      <tr><td>4</td><td>奥の対象を pick</td><td class="ok">成功（+16.6 cm 持ち上げて保持）</td></tr>
+      <tr><td>4</td><td>正面から観察</td><td class="ok">できた</td></tr>
+      <tr><td>5</td><td>横から覗く</td><td class="ok">できた</td></tr>
+      <tr><td>6</td><td>手前の物をずらす</td><td class="ok">成功（+16.4 cm 持ち上げて棚の外へ）</td></tr>
+      <tr><td>7</td><td>奥を覗く</td><td class="ok">できた</td></tr>
+      <tr><td>8</td><td>別の商品をどかす</td><td class="muted">遠いのでスキップ</td></tr>
+      <tr><td>9</td><td>再観察</td><td class="ok">できた</td></tr>
+      <tr><td>10</td><td>奥の対象を pick</td><td class="ok">成功（+16.6 cm 持ち上げて保持）</td></tr>
     </tbody>
   </table>
 
