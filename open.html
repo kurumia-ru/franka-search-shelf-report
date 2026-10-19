@@ -67,7 +67,8 @@
   <h1>棚を開けて奥の対象を探す</h1>
   <p class="lead">
     閉まった棚を開けて、奥の対象を掴み出すタスク。
-    開ける動きは公式 OpenCabinet 人間デモから抽出。
+    左右の扉とも公式 OpenCabinet 人間デモの Primitive でハンドルを持って引く。
+    開けたあとは、ずらす→ピックができた初期姿勢まで戻してから、その先の動きを同じカメラで撮る。
     遠隔操作なし。Franka（PandaOmron）の GT スクリプト。
   </p>
   <p class="muted"><a href="index.html">開けた棚の中を探す</a></p>
@@ -101,14 +102,15 @@
     <tbody>
       <tr><td>1</td><td>台車を少し下げて、扉が振れる隙間をつくる</td></tr>
       <tr><td>2</td><td>左扉を、公式デモと同じ下からの接近で引いて開ける</td></tr>
-      <tr><td>3</td><td>右扉を開けて、棚の中に入れるようにする</td></tr>
-      <tr><td>4</td><td>正面から観察する</td></tr>
-      <tr><td>5</td><td>横から覗く</td></tr>
-      <tr><td>6</td><td>手前の物をずらす</td></tr>
-      <tr><td>7</td><td>奥を覗く</td></tr>
-      <tr><td>8</td><td>別の商品をどかす</td></tr>
-      <tr><td>9</td><td>もう一度観察する</td></tr>
-      <tr><td>10</td><td>奥の対象を pick する</td></tr>
+      <tr><td>3</td><td>右扉も同じ Primitive でハンドルを持って引く</td></tr>
+      <tr><td>4</td><td>ずらす→ピックができた初期姿勢まで戻る</td></tr>
+      <tr><td>5</td><td>正面から観察する</td></tr>
+      <tr><td>6</td><td>横から覗く</td></tr>
+      <tr><td>7</td><td>手前の物をずらす</td></tr>
+      <tr><td>8</td><td>奥を覗く</td></tr>
+      <tr><td>9</td><td>別の商品をどかす</td></tr>
+      <tr><td>10</td><td>もう一度観察する</td></tr>
+      <tr><td>11</td><td>奥の対象を pick する</td></tr>
     </tbody>
   </table>
 
@@ -119,41 +121,42 @@
     </thead>
     <tbody>
       <tr><td>1</td><td>台車を下げる</td><td class="ok">できた</td></tr>
-      <tr><td>2</td><td>左扉を開ける</td><td class="ok">できた</td></tr>
-      <tr><td>3</td><td>右扉を開ける</td><td class="ok">できた</td></tr>
-      <tr><td>4</td><td>正面から観察</td><td class="ok">できた</td></tr>
-      <tr><td>5</td><td>横から覗く</td><td class="ok">できた</td></tr>
-      <tr><td>6</td><td>手前の物をずらす</td><td class="ok">成功（+16.4 cm 持ち上げて棚の外へ）</td></tr>
-      <tr><td>7</td><td>奥を覗く</td><td class="ok">できた</td></tr>
-      <tr><td>8</td><td>別の商品をどかす</td><td class="muted">遠いのでスキップ</td></tr>
-      <tr><td>9</td><td>再観察</td><td class="ok">できた</td></tr>
-      <tr><td>10</td><td>奥の対象を pick</td><td class="ok">成功（+16.6 cm 持ち上げて保持）</td></tr>
+      <tr><td>2</td><td>左扉を Primitive で引く</td><td class="ok">できた</td></tr>
+      <tr><td>3</td><td>右扉を Primitive で引く</td><td class="ok">できた</td></tr>
+      <tr><td>4</td><td>初期姿勢まで戻る</td><td class="ok">できた</td></tr>
+      <tr><td>5</td><td>正面から観察</td><td class="ok">できた</td></tr>
+      <tr><td>6</td><td>横から覗く</td><td class="ok">できた</td></tr>
+      <tr><td>7</td><td>手前の物をずらす</td><td class="ok">成功（棚の外へ）</td></tr>
+      <tr><td>8</td><td>奥を覗く</td><td class="ok">できた</td></tr>
+      <tr><td>9</td><td>別の商品をどかす</td><td class="muted">遠いのでスキップ</td></tr>
+      <tr><td>10</td><td>再観察</td><td class="ok">できた</td></tr>
+      <tr><td>11</td><td>奥の対象を pick</td><td class="ok">成功（+16.6 cm 持ち上げて保持）</td></tr>
     </tbody>
   </table>
 
   <h2>動画</h2>
   <figure>
     <video controls playsinline>
-      <source src="videos/open/full_side_by_side.mp4" type="video/mp4" />
+      <source src="videos/open/both_pull_side_by_side.mp4" type="video/mp4" />
     </video>
     <figcaption>左: 三人称 · 右: 一人称</figcaption>
   </figure>
   <div class="grid">
     <figure>
       <video controls playsinline>
-        <source src="videos/open/full_agentview_left.mp4" type="video/mp4" />
+        <source src="videos/open/both_pull_agentview_left.mp4" type="video/mp4" />
       </video>
       <figcaption>三人称（左）</figcaption>
     </figure>
     <figure>
       <video controls playsinline>
-        <source src="videos/open/full_eye_in_hand.mp4" type="video/mp4" />
+        <source src="videos/open/both_pull_eye_in_hand.mp4" type="video/mp4" />
       </video>
       <figcaption>一人称</figcaption>
     </figure>
     <figure>
       <video controls playsinline>
-        <source src="videos/open/full_agentview_center.mp4" type="video/mp4" />
+        <source src="videos/open/both_pull_agentview_center.mp4" type="video/mp4" />
       </video>
       <figcaption>三人称（中央）</figcaption>
     </figure>
