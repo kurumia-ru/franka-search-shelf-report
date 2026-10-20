@@ -7,3 +7,4 @@ GitHub Pages:
 - 棚を開けてから探す: https://kurumia-ru.github.io/franka-search-shelf-report/open.html
 - ボウルを上から覗いて取る: https://kurumia-ru.github.io/franka-search-shelf-report/inspect.html
 - 引き出しを開けて中を取る: https://kurumia-ru.github.io/franka-search-shelf-report/drawer.html
+- 箱の裏を視点移動して取る: https://kurumia-ru.github.io/franka-search-shelf-report/viewpoint.html
