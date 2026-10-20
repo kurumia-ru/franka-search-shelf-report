@@ -9,3 +9,4 @@ GitHub Pages:
 - 引き出しを開けて中を取る: https://kurumia-ru.github.io/franka-search-shelf-report/drawer.html
 - 箱の裏を視点移動して取る: https://kurumia-ru.github.io/franka-search-shelf-report/viewpoint.html
 - 箱の裏を探してボウルに置く: https://kurumia-ru.github.io/franka-search-shelf-report/occluded.html
+- カバーをずらして答えて置く: https://kurumia-ru.github.io/franka-search-shelf-report/qa.html
