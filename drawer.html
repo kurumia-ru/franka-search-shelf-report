@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ActToKnowOpenDrawer — 引き出しを開けて中を取る</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #eef2f0;
+      --ink: #1b1f1c;
+      --muted: #5c6560;
+      --line: #c9d2cc;
+      --card: #fbfcfb;
+      --ok: #0b6b45;
+      --accent: #1f4d3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Noto Sans JP", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 380px at 0% -10%, #d5e6dc 0%, transparent 55%),
+        var(--bg);
+      line-height: 1.5;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 3.5rem; }
+    h1 { font-size: 1.45rem; margin: 0 0 0.4rem; }
+    h2 { font-size: 1.08rem; margin: 1.8rem 0 0.6rem; }
+    p.lead { color: var(--muted); margin: 0 0 1.1rem; max-width: 42rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 0.88rem;
+      margin-bottom: 0.85rem;
+    }
+    th, td { padding: 0.45rem 0.55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #e5ebe7; font-weight: 600; }
+    table.kv th { width: 8.5rem; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    figure {
+      margin: 0 0 0.85rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    video { width: 100%; display: block; background: #111; }
+    figcaption { padding: 0.4rem 0.55rem; font-size: 0.8rem; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+    }
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>引き出しを開けて中を取る</h1>
+  <p class="lead">
+    対象は閉まった引き出しの中にあり、初期観測では見えない。
+    ハンドルを引いて開け、手首カメラで中を見てから取り出す。
+    遠隔操作なし。Franka（PandaOmron）の GT スクリプト。Act-to-Know の短ホライゾン課題。
+  </p>
+  <p class="muted">
+    <a href="index.html">開けた棚の中を探す</a>
+    ·
+    <a href="open.html">棚を開けてから探す</a>
+    ·
+    <a href="inspect.html">ボウルを上から覗いて取る</a>
+  </p>
+
+  <h2>条件</h2>
+  <table class="kv">
+    <tr><th>環境</th><td>RoboCasa365 キッチン</td></tr>
+    <tr><th>ロボット</th><td>Franka PandaOmron</td></tr>
+    <tr><th>操作</th><td>遠隔操作なし（位置指定の自動動作）</td></tr>
+    <tr><th>隠れ状態</th><td>対象が閉まった引き出しの中にある</td></tr>
+    <tr><th>情報取得</th><td>ハンドルを引いて開け、上から中を見る</td></tr>
+    <tr><th>情報保持</th><td>開いたまま対象位置を使って取りに行く</td></tr>
+    <tr><th>成功</th><td>対象を掴んで持ち上げる</td></tr>
+    <tr><th>seed</th><td>5</td></tr>
+  </table>
+  <table>
+    <thead>
+      <tr><th>物体</th><th>役割</th><th>位置</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>drawer_obj（リンゴ）</td><td>対象。最後に pick</td><td>閉まった引き出しの中</td></tr>
+    </tbody>
+  </table>
+
+  <h2>手順</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>内容</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>初期姿勢で観察する（引き出しは閉まっている）</td></tr>
+      <tr><td>2</td><td>ハンドルを持って引き出しを引く</td></tr>
+      <tr><td>3</td><td>開いた中を上から覗く</td></tr>
+      <tr><td>4</td><td>中の対象を pick する</td></tr>
+    </tbody>
+  </table>
+
+  <h2>結果（seed 5）</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>内容</th><th>結果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>初期観察</td><td class="ok">できた</td></tr>
+      <tr><td>2</td><td>引き出しを開ける</td><td class="ok">できた（開放 89%）</td></tr>
+      <tr><td>3</td><td>中を覗く</td><td class="ok">できた</td></tr>
+      <tr><td>4</td><td>リンゴを pick</td><td class="ok">できた（持ち上げ +14.2cm）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>動画</h2>
+  <figure>
+    <video controls playsinline>
+      <source src="videos/drawer/drawer_side_by_side.mp4" type="video/mp4" />
+    </video>
+    <figcaption>左: 三人称 · 右: 一人称</figcaption>
+  </figure>
+  <div class="grid">
+    <figure>
+      <video controls playsinline>
+        <source src="videos/drawer/drawer_agentview_left.mp4" type="video/mp4" />
+      </video>
+      <figcaption>三人称（左）</figcaption>
+    </figure>
+    <figure>
+      <video controls playsinline>
+        <source src="videos/drawer/drawer_eye_in_hand.mp4" type="video/mp4" />
+      </video>
+      <figcaption>一人称</figcaption>
+    </figure>
+    <figure>
+      <video controls playsinline>
+        <source src="videos/drawer/drawer_agentview_center.mp4" type="video/mp4" />
+      </video>
+      <figcaption>三人称（中央）</figcaption>
+    </figure>
+  </div>
+</main>
+</body>
+</html>
