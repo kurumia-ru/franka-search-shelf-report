@@ -58,9 +58,9 @@
 <main>
   <h1>引き出しからスプーンとフォークを探して並べる</h1>
   <p class="lead">
-    Find a spoon and a fork in the kitchen and arrange them side by side on the table.
-    スプーンとフォークは別々の閉じた引き出しにあり、場所は未知。
-    キッチンを見て引き出しを開け、どれがどれかを答えてから横並びに置く。
+    Find a spoon and a fork in the kitchen and arrange them side by side on the tray.
+    スプーンとフォークは別々の閉じた引き出しにあり、場所は未知。引き出しにはナイフや泡立て器なども入っている。
+    開けて中身を見て、スプーンとフォークだけ選んでお盆に載せる。入っていない引き出しからは何も取らない。
     Active Perception → Interactive Perception → QA → Active Manipulation。
   </p>
   <p class="muted">
@@ -74,10 +74,10 @@
     <tr><th>環境</th><td>RoboCasa365 キッチン</td></tr>
     <tr><th>ロボット</th><td>Franka PandaOmron</td></tr>
     <tr><th>操作</th><td>遠隔操作なし（位置指定の自動動作）</td></tr>
-    <tr><th>初期</th><td>スプーンとフォークがそれぞれ異なる引き出し。収納場所は未知</td></tr>
-    <tr><th>テーブル</th><td>ダイニング島は遠いので、近くのカウンターを使う</td></tr>
+    <tr><th>初期</th><td>スプーンとフォークがそれぞれ異なる引き出し。ほかの食器も一緒に入っている。収納場所は未知</td></tr>
+    <tr><th>テーブル</th><td>近くのカウンターにお盆を置き、その上に載せる</td></tr>
     <tr><th>QA</th><td>Which drawers contain the spoon and the fork?</td></tr>
-    <tr><th>成功</th><td>両方を正しく特定し、カウンター上に横並びで置く</td></tr>
+    <tr><th>成功</th><td>両方を正しく特定し、お盆の上に横並びで置く。ほかの物は残す</td></tr>
     <tr><th>seed</th><td>5</td></tr>
   </table>
 
@@ -88,22 +88,22 @@
     </thead>
     <tbody>
       <tr><td>AP</td><td>キッチンを観測し、閉じた引き出しの位置を確認する</td><td class="ok">まだ分からない</td></tr>
-      <tr><td>IP</td><td>引き出しを開けて中を見る</td><td class="ok">A=フォーク · B=スプーン</td></tr>
+      <tr><td>IP</td><td>引き出しを開けて中を見る</td><td class="ok">A=フォーク+ナイフ · B=スプーン+泡立て器</td></tr>
       <tr><td>QA</td><td>Which drawers contain the spoon and the fork?</td><td class="ok">spoon=B fork=A</td></tr>
-      <tr><td>AM</td><td>グリッパーでつかんでカウンターに横並びで置く</td><td class="ok">できた</td></tr>
+      <tr><td>AM</td><td>スプーンとフォークだけつかんでお盆に横並びで置く</td><td class="ok">できた</td></tr>
     </tbody>
   </table>
 
   <h2>動画</h2>
   <figure>
     <video controls playsinline autoplay muted>
-      <source src="videos/utensils/utensils_side_by_side_2x.mp4?v=5" type="video/mp4" />
+      <source src="videos/utensils/utensils_side_by_side_2x.mp4?v=6" type="video/mp4" />
     </video>
     <figcaption>2倍速 · 左: 三人称 · 右: 一人称</figcaption>
   </figure>
   <figure>
     <video controls playsinline>
-      <source src="videos/utensils/utensils_side_by_side.mp4?v=5" type="video/mp4" />
+      <source src="videos/utensils/utensils_side_by_side.mp4?v=6" type="video/mp4" />
     </video>
     <figcaption>原速</figcaption>
   </figure>
