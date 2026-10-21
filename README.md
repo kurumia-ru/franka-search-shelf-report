@@ -10,3 +10,4 @@ GitHub Pages:
 - 箱の裏を視点移動して取る: https://kurumia-ru.github.io/franka-search-shelf-report/viewpoint.html
 - 箱の裏を探してボウルに置く: https://kurumia-ru.github.io/franka-search-shelf-report/occluded.html
 - カバーをずらして答えて置く: https://kurumia-ru.github.io/franka-search-shelf-report/qa.html
+- 引き出しからスプーンとフォークを探して並べる: https://kurumia-ru.github.io/franka-search-shelf-report/utensils.html
